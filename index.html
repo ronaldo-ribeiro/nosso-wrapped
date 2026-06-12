@@ -105,6 +105,23 @@ body{
   transform:scaleX(0); transform-origin:left;
 }
 
+/* ---------- botão de mudo da música de fundo ---------- */
+.botao-som{
+  position:absolute; z-index:35;
+  top:calc(24px + env(safe-area-inset-top));
+  right:14px;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(8,9,8,.55);
+  color:var(--verde-claro);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; backdrop-filter:blur(6px);
+  transition:opacity .4s, transform .15s;
+}
+.botao-som:active{ transform:scale(.9); }
+.botao-som svg{ width:18px; height:18px; }
+.botao-som.oculto{ opacity:0; pointer-events:none; }
+
 /* ---------- zonas de toque (esquerda volta / direita avança) ---------- */
 .zonas{
   position:absolute; inset:0; z-index:25;
@@ -470,6 +487,17 @@ body{
   <!-- Barra de progresso estilo stories (segmentos criados via JS) -->
   <header class="progresso oculto" id="progresso" aria-hidden="true"></header>
 
+  <!-- Música de fundo (prévia oficial) e botão de mudo -->
+  <audio id="audio-musica" preload="auto" loop></audio>
+  <button class="botao-som oculto" id="botao-som" aria-label="Silenciar ou tocar a música">
+    <svg id="icone-som-ligado" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/>
+    </svg>
+    <svg id="icone-som-desligado" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.7-2.7-1.4-1.4-2.7 2.7-2.7-2.7-1.4 1.4 2.7 2.7-2.7 2.7 1.4 1.4 2.7-2.7 2.7 2.7 1.4-1.4-2.7-2.7z"/>
+    </svg>
+  </button>
+
   <div class="palco">
 
     <!-- ===== 1. CAPA ===== -->
@@ -597,7 +625,13 @@ const CONFIG = {
   // Data de início do relacionamento: ano, mês (1-12), dia
   inicio: { ano: 2013, mes: 2, dia: 3 },
 
-  musica: { nome: "A Thousand Years", artista: "Christina Perri" },
+  musica: {
+    nome: "A Thousand Years",
+    artista: "Christina Perri",
+    // Trecho de prévia oficial (30s) da Apple/iTunes — refrão da música.
+    // Se a URL expirar um dia, o código busca outra automaticamente na API do iTunes.
+    previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/50/8c/53/508c533a-955c-961e-4338-fa4a438799f9/mzaf_15648601222043785811.plus.aac.p.m4a"
+  },
 
   // Momentos marcantes, em ordem cronológica
   momentos: [
@@ -775,11 +809,51 @@ function quadro(ts) {
 }
 requestAnimationFrame(quadro);
 
+/* ---------- música de fundo: prévia oficial de 30s, em loop ---------- */
+const audio = document.getElementById("audio-musica");
+const botaoSom = document.getElementById("botao-som");
+let fadeMusica = null;
+
+function iniciarMusica() {
+  // Precisa ser chamada dentro de um gesto do usuário (toque no play)
+  audio.src = CONFIG.musica.previewUrl;
+  audio.volume = 0;
+  audio.play().catch(() => {});   // se o navegador bloquear, a retrospectiva segue sem som
+  clearInterval(fadeMusica);
+  fadeMusica = setInterval(() => {
+    audio.volume = Math.min(0.75, audio.volume + 0.05);
+    if (audio.volume >= 0.75) clearInterval(fadeMusica);
+  }, 100);
+}
+
+// Se a URL da prévia expirar um dia, busca outra na API pública do iTunes (JSONP)
+audio.addEventListener("error", () => {
+  if (!audio.src) return;
+  window.cbItunes = (dados) => {
+    const r = (dados.results || [])[0];
+    if (r && r.previewUrl) { audio.src = r.previewUrl; audio.play().catch(() => {}); }
+  };
+  const s = document.createElement("script");
+  s.src = "https://itunes.apple.com/search?term=" +
+    encodeURIComponent(CONFIG.musica.nome + " " + CONFIG.musica.artista) +
+    "&media=music&limit=1&callback=cbItunes";
+  document.head.appendChild(s);
+});
+
+botaoSom.addEventListener("click", (e) => {
+  e.stopPropagation();
+  audio.muted = !audio.muted;
+  document.getElementById("icone-som-ligado").style.display = audio.muted ? "none" : "";
+  document.getElementById("icone-som-desligado").style.display = audio.muted ? "" : "none";
+});
+
 document.getElementById("botao-play").addEventListener("click", () => {
   iniciado = true;
   progresso.classList.remove("oculto");
   zonas.classList.remove("oculto");
+  botaoSom.classList.remove("oculto");
   progresso.removeAttribute("aria-hidden");
+  iniciarMusica();
   irPara(1);
 });
 
@@ -796,6 +870,8 @@ zonas.addEventListener("pointerdown", (e) => {
 zonas.addEventListener("pointerup", (e) => {
   e.preventDefault();
   clearTimeout(timerSegurar);
+  // se algum navegador tiver pausado o áudio, qualquer toque retoma (é um gesto válido)
+  if (iniciado && audio.src && audio.paused && !oculto && !audio.muted) audio.play().catch(() => {});
   if (segurando) { pausado = false; segurando = false; return; }
   const x = e.clientX - zonas.getBoundingClientRect().left;
   const ladoEsquerdo = x < zonas.clientWidth * 0.33;
@@ -820,10 +896,14 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") irPara(atual - 1);
 });
 
-// Pausa quando a aba/tela sai de foco, para não pular slides sozinha
+// Pausa quando a aba/tela sai de foco, para não pular slides sozinha (nem música tocando à toa)
 document.addEventListener("visibilitychange", () => {
   oculto = document.hidden;
   tsAnterior = null;
+  if (iniciado) {
+    if (oculto) audio.pause();
+    else audio.play().catch(() => {});
+  }
 });
 </script>
 </body>
