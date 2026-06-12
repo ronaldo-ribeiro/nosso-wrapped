@@ -1,1 +1,10 @@
 qr-nosso-wrapped.png
+converte_fotos.py
+
+# fotos originais ficam fora do repositorio; so as otimizadas em uso sao publicadas
+Namorados 2026/
+fotos/*
+!fotos/adega.jpg
+!fotos/lavanda-sq.jpg
+!fotos/suica-thumb.jpg
+!fotos/cartorio-thumb.jpg
