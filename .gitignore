@@ -8,3 +8,6 @@ fotos/*
 !fotos/lavanda-sq.jpg
 !fotos/suica-thumb.jpg
 !fotos/cartorio-thumb.jpg
+grava_video.py
+_gravacao/
+*.mp4
