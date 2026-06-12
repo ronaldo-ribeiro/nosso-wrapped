@@ -3,31 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#080908">
-<title>Nosso Wrapped — Ronaldo &amp; Celina 💚</title>
-<meta property="og:title" content="Para você, Celina 💚">
+<meta name="theme-color" content="#050B1A">
+<title>Nosso Wrapped — Ronaldo &amp; Celina 💙</title>
+<meta property="og:title" content="Para você, Celina 💙">
 <meta property="og:description" content="Sua retrospectiva chegou. Toque para abrir.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ronaldo-ribeiro.github.io/nosso-wrapped/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%231DB954' d='M12 21s-7.5-4.7-10-9.3C.3 8.6 2.4 5 5.9 5c2 0 3.4 1 4.1 2.4h4C14.7 6 16.1 5 18.1 5c3.5 0 5.6 3.6 3.9 6.7C19.5 16.3 12 21 12 21z'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%233FB6FF' d='M12 21s-7.5-4.7-10-9.3C.3 8.6 2.4 5 5.9 5c2 0 3.4 1 4.1 2.4h4C14.7 6 16.1 5 18.1 5c3.5 0 5.6 3.6 3.9 6.7C19.5 16.3 12 21 12 21z'/%3E%3C/svg%3E">
+<link rel="preload" as="image" href="fotos/adega.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Figtree:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    NOSSO WRAPPED — retrospectiva romântica estilo Spotify Wrapped
-   Tema: fundo escuro + verde vibrante + tipografia de impacto
+   Tema: céu noturno estrelado + azul vibrante + tipografia de impacto
    ============================================================ */
 :root{
-  --verde:        #1DB954;            /* verde Spotify */
-  --verde-claro:  #6BE89B;
-  --verde-neon:   #3DF07C;
-  --verde-fundo:  rgba(29,185,84,.14);
-  --fundo:        #080908;
-  --fundo-2:      #0E110E;
-  --branco:       #F4F6F2;
-  --cinza:        #9aa49c;
-  --cinza-escuro: #5b645d;
+  --ceu:          #3FB6FF;            /* azul da cor do céu */
+  --ceu-claro:    #8AD7FF;
+  --ceu-neon:     #5FD4FF;
+  --ceu-fundo:    rgba(63,182,255,.14);
+  --fundo:        #050B1A;            /* azul-noite profundo */
+  --fundo-2:      #0A1426;
+  --branco:       #F3F7FC;
+  --cinza:        #93A1B5;
+  --cinza-escuro: #56657d;
   --fonte-corpo:  'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --fonte-display:'Anton', 'Arial Narrow', Impact, sans-serif;
   --fonte-serifa: 'Instrument Serif', Georgia, 'Times New Roman', serif;
@@ -38,7 +39,7 @@
 html, body{ height:100%; }
 
 body{
-  background:#050605;
+  background:#02060F;
   color:var(--branco);
   font-family:var(--fonte-corpo);
   -webkit-font-smoothing:antialiased;
@@ -64,18 +65,18 @@ body{
 @media (min-width:560px) and (min-height:700px){
   body{
     background:
-      radial-gradient(60% 50% at 50% 42%, rgba(29,185,84,.13), transparent 70%),
-      #030403;
+      radial-gradient(60% 50% at 50% 42%, rgba(63,182,255,.13), transparent 70%),
+      #01040A;
   }
   .celular{
     width:404px;
     height:min(94dvh, 856px);
     border-radius:40px;
-    border:1px solid #1d231e;
+    border:1px solid #16233A;
     box-shadow:
-      0 0 0 8px #0a0c0a,
+      0 0 0 8px #070C16,
       0 40px 90px rgba(0,0,0,.75),
-      0 0 120px rgba(29,185,84,.10);
+      0 0 120px rgba(63,182,255,.10);
   }
 }
 
@@ -85,6 +86,22 @@ body{
   opacity:.06; mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.8'/%3E%3C/svg%3E");
 }
+
+/* ---------- céu estrelado: duas camadas fora de fase cintilando ---------- */
+.estrelas{
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg fill='%23BFE3FF'%3E%3Ccircle cx='18' cy='32' r='1.1'/%3E%3Ccircle cx='76' cy='12' r='0.7'/%3E%3Ccircle cx='133' cy='51' r='1.3'/%3E%3Ccircle cx='190' cy='25' r='0.8'/%3E%3Ccircle cx='44' cy='98' r='0.9'/%3E%3Ccircle cx='162' cy='118' r='0.7'/%3E%3Ccircle cx='98' cy='150' r='1.2'/%3E%3Ccircle cx='205' cy='171' r='1'/%3E%3Ccircle cx='28' cy='187' r='0.8'/%3E%3Ccircle cx='121' cy='205' r='0.9'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:220px 220px;
+  animation:cintilar 6s ease-in-out infinite;
+}
+.estrelas::after{
+  content:""; position:absolute; inset:0;
+  background-image:inherit;
+  background-size:310px 310px;
+  background-position:95px 70px;
+  animation:cintilar 8s ease-in-out 2.6s infinite;
+}
+@keyframes cintilar{ 0%,100%{ opacity:.25; } 50%{ opacity:.8; } }
 
 /* ---------- barra de progresso (estilo stories) ---------- */
 .progresso{
@@ -101,7 +118,7 @@ body{
 }
 .seg i{
   display:block; height:100%; width:100%;
-  background:linear-gradient(90deg, var(--verde), var(--verde-neon));
+  background:linear-gradient(90deg, var(--ceu), var(--ceu-neon));
   transform:scaleX(0); transform-origin:left;
 }
 
@@ -112,8 +129,8 @@ body{
   right:14px;
   width:38px; height:38px; border-radius:50%;
   border:1px solid rgba(255,255,255,.16);
-  background:rgba(8,9,8,.55);
-  color:var(--verde-claro);
+  background:rgba(5,11,26,.55);
+  color:var(--ceu-claro);
   display:flex; align-items:center; justify-content:center;
   cursor:pointer; backdrop-filter:blur(6px);
   transition:opacity .4s, transform .15s;
@@ -154,11 +171,11 @@ body{
 /* ---------- tipografia base ---------- */
 .etiqueta{
   font-size:11px; font-weight:800; letter-spacing:.22em;
-  text-transform:uppercase; color:var(--verde-claro);
+  text-transform:uppercase; color:var(--ceu-claro);
   display:flex; align-items:center; gap:10px;
 }
 .etiqueta::before{
-  content:""; width:22px; height:2px; background:var(--verde);
+  content:""; width:22px; height:2px; background:var(--ceu);
   border-radius:2px; flex:none;
 }
 .titulo{
@@ -168,35 +185,41 @@ body{
 }
 .serifa{ font-family:var(--fonte-serifa); font-style:italic; font-weight:400; }
 .apoio{ color:var(--cinza); font-size:15px; line-height:1.55; }
-.destaque-verde{ color:var(--verde); }
+.destaque-ceu{ color:var(--ceu); }
 
 /* número/figura decorativa gigante ao fundo */
 .fantasma{
   position:absolute; z-index:-1; pointer-events:none;
   font-family:var(--fonte-display);
   color:transparent;
-  -webkit-text-stroke:1.5px rgba(29,185,84,.16);
+  -webkit-text-stroke:1.5px rgba(63,182,255,.16);
   line-height:1;
 }
 
 /* ============ SLIDE 1 — CAPA ============ */
 .s-capa{ text-align:center; align-items:center; justify-content:center; gap:0;
+  isolation:isolate;
   background:
-    radial-gradient(75% 55% at 50% 110%, rgba(29,185,84,.22), transparent 70%),
-    radial-gradient(50% 35% at 85% -5%, rgba(29,185,84,.12), transparent 70%),
+    linear-gradient(180deg, rgba(5,11,26,.42) 0%, rgba(5,11,26,.6) 42%, rgba(5,11,26,.9) 78%, var(--fundo) 100%),
+    url("fotos/adega.jpg") 35% 30% / cover no-repeat,
     var(--fundo);
 }
+.s-capa::before{ /* duotone azul sobre a foto P&B */
+  content:""; position:absolute; inset:0; z-index:-1;
+  background:var(--ceu); mix-blend-mode:color; opacity:.45;
+}
+.s-capa .fantasma{ display:none; }
 .s-capa .selo{
   font-size:10px; font-weight:800; letter-spacing:.3em; text-transform:uppercase;
-  color:var(--verde-claro);
-  border:1px solid rgba(29,185,84,.45);
+  color:var(--ceu-claro);
+  border:1px solid rgba(63,182,255,.45);
   border-radius:99px; padding:8px 16px;
   margin-bottom:34px;
 }
 .s-capa .nomes{ font-size:clamp(48px, 14.5vw, 64px); }
 .s-capa .nomes em{
   font-family:var(--fonte-serifa); font-style:italic; text-transform:none;
-  font-size:.62em; color:var(--verde); vertical-align:.12em; padding-right:.12em;
+  font-size:.62em; color:var(--ceu); vertical-align:.12em; padding-right:.12em;
 }
 .s-capa .sub{ margin-top:18px; font-size:16px; color:var(--cinza); }
 .s-capa .sub strong{ color:var(--branco); font-weight:700; }
@@ -204,8 +227,8 @@ body{
   margin-top:44px;
   width:84px; height:84px; border-radius:50%;
   border:none; cursor:pointer;
-  background:var(--verde);
-  color:#04240f;
+  background:var(--ceu);
+  color:#03182E;
   display:flex; align-items:center; justify-content:center;
   animation:pulsar 2.2s ease-out infinite;
   transition:transform .2s;
@@ -213,9 +236,9 @@ body{
 .botao-play:active{ transform:scale(.92); }
 .botao-play svg{ width:30px; height:30px; margin-left:5px; }
 @keyframes pulsar{
-  0%  { box-shadow:0 0 0 0 rgba(29,185,84,.45); }
-  70% { box-shadow:0 0 0 26px rgba(29,185,84,0); }
-  100%{ box-shadow:0 0 0 0 rgba(29,185,84,0); }
+  0%  { box-shadow:0 0 0 0 rgba(63,182,255,.45); }
+  70% { box-shadow:0 0 0 26px rgba(63,182,255,0); }
+  100%{ box-shadow:0 0 0 0 rgba(63,182,255,0); }
 }
 .s-capa .dica-play{
   margin-top:18px; font-size:12px; letter-spacing:.18em;
@@ -226,12 +249,12 @@ body{
 /* ============ SLIDE 2 — ABERTURA ============ */
 .s-abertura{ gap:22px;
   background:
-    radial-gradient(60% 40% at 0% 0%, rgba(29,185,84,.14), transparent 65%),
+    radial-gradient(60% 40% at 0% 0%, rgba(63,182,255,.14), transparent 65%),
     var(--fundo);
 }
 .s-abertura .linha-g{ font-size:clamp(34px,9.6vw,44px); }
 .s-abertura .data-serifa{
-  font-size:clamp(40px,11vw,52px); color:var(--verde); line-height:1.1;
+  font-size:clamp(40px,11vw,52px); color:var(--ceu); line-height:1.1;
 }
 .s-abertura .apoio{ font-size:16px; max-width:30ch; }
 .s-abertura .apoio b{ color:var(--branco); }
@@ -240,14 +263,14 @@ body{
 /* ============ SLIDE 3 — TEMPO JUNTOS ============ */
 .s-tempo{ gap:26px;
   background:
-    radial-gradient(70% 45% at 100% 100%, rgba(29,185,84,.16), transparent 70%),
+    radial-gradient(70% 45% at 100% 100%, rgba(63,182,255,.16), transparent 70%),
     var(--fundo);
 }
 .s-tempo .titulo{ font-size:clamp(36px,10vw,46px); }
 .contador{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
 .bloco-tempo{
-  background:linear-gradient(160deg, rgba(29,185,84,.13), rgba(29,185,84,.04));
-  border:1px solid rgba(29,185,84,.22);
+  background:linear-gradient(160deg, rgba(63,182,255,.13), rgba(63,182,255,.04));
+  border:1px solid rgba(63,182,255,.22);
   border-radius:18px;
   padding:16px 6px 13px;
   text-align:center;
@@ -255,24 +278,24 @@ body{
 .bloco-tempo .num{
   font-family:var(--fonte-display);
   font-size:clamp(30px,8.4vw,38px);
-  color:var(--verde-neon); line-height:1;
+  color:var(--ceu-neon); line-height:1;
   font-variant-numeric:tabular-nums;
 }
 .bloco-tempo .rotulo{
   margin-top:7px; font-size:10px; font-weight:800;
   letter-spacing:.16em; text-transform:uppercase; color:var(--cinza);
 }
-.s-tempo .fantasma{ font-size:330px; top:-40px; right:-90px; font-family:var(--fonte-serifa); -webkit-text-stroke:1.5px rgba(29,185,84,.2); }
+.s-tempo .fantasma{ font-size:330px; top:-40px; right:-90px; font-family:var(--fonte-serifa); -webkit-text-stroke:1.5px rgba(63,182,255,.2); }
 
 /* ============ SLIDE 4 — NOSSA MÚSICA ============ */
 .s-musica{ gap:24px;
   background:
-    radial-gradient(80% 50% at 50% -10%, rgba(29,185,84,.17), transparent 70%),
+    radial-gradient(80% 50% at 50% -10%, rgba(63,182,255,.17), transparent 70%),
     var(--fundo);
 }
 .player{
-  background:#101510;
-  border:1px solid #1d2a1f;
+  background:#0B1322;
+  border:1px solid #1B2B45;
   border-radius:22px;
   padding:22px;
   box-shadow:0 24px 60px rgba(0,0,0,.5);
@@ -281,7 +304,7 @@ body{
   position:relative;
   width:100%; aspect-ratio:1/1;
   border-radius:14px; overflow:hidden;
-  background:conic-gradient(from 210deg at 60% 40%, #062b14, var(--verde), #0a3d1f, var(--verde-neon), #062b14);
+  background:conic-gradient(from 210deg at 60% 40%, #07294A, var(--ceu), #0B3D66, var(--ceu-neon), #07294A);
   display:flex; align-items:center; justify-content:center;
   margin-bottom:20px;
 }
@@ -291,20 +314,15 @@ body{
   animation:girar 9s linear infinite;
 }
 @keyframes girar{ to{ transform:rotate(360deg); } }
-.capa-album svg{ width:38%; filter:drop-shadow(0 10px 24px rgba(0,0,0,.45)); animation:bater 1.6s ease-in-out infinite; }
-@keyframes bater{
-  0%,100%{ transform:scale(1); }
-  12%    { transform:scale(1.1); }
-  24%    { transform:scale(1); }
-  36%    { transform:scale(1.07); }
-  48%    { transform:scale(1); }
+.capa-album img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
 }
 .faixa{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .faixa .nome{ font-weight:800; font-size:18px; }
 .faixa .artista{ color:var(--cinza); font-size:13.5px; margin-top:3px; }
 .equalizador{ display:flex; align-items:flex-end; gap:3px; height:22px; flex:none; }
 .equalizador i{
-  width:4px; border-radius:2px; background:var(--verde);
+  width:4px; border-radius:2px; background:var(--ceu);
   animation:eq 1s ease-in-out infinite;
 }
 .equalizador i:nth-child(1){ height:60%; animation-delay:0s; }
@@ -314,11 +332,11 @@ body{
 @keyframes eq{ 0%,100%{ transform:scaleY(.4);} 50%{ transform:scaleY(1);} }
 .linha-progresso{ margin-top:18px; }
 .linha-progresso .trilho{
-  height:4px; border-radius:99px; background:#243227; position:relative;
+  height:4px; border-radius:99px; background:#1E3050; position:relative;
 }
 .linha-progresso .feito{
   position:absolute; inset:0 31% 0 0;
-  background:var(--verde); border-radius:99px;
+  background:var(--ceu); border-radius:99px;
 }
 .linha-progresso .feito::after{
   content:""; position:absolute; right:-5px; top:50%;
@@ -333,33 +351,43 @@ body{
 .s-musica .citacao{
   font-size:clamp(21px,6vw,25px); line-height:1.35; color:var(--branco);
 }
-.s-musica .citacao span{ color:var(--verde-claro); }
+.s-musica .citacao span{ color:var(--ceu-claro); }
 
 /* ============ SLIDE 5 — MOMENTOS ============ */
 .s-momentos{ gap:26px;
   background:
-    radial-gradient(55% 40% at 100% 0%, rgba(29,185,84,.14), transparent 70%),
+    radial-gradient(55% 40% at 100% 0%, rgba(63,182,255,.14), transparent 70%),
     var(--fundo);
 }
 .s-momentos .titulo{ font-size:clamp(32px,9vw,42px); }
 .linha-tempo{ display:flex; flex-direction:column; gap:4px; }
 .momento{
-  position:relative; padding:0 0 22px 30px;
+  position:relative; padding:0 0 18px 30px;
+  display:flex; gap:14px; align-items:flex-start;
 }
+.momento .info-momento{ flex:1; min-width:0; }
+.foto-momento{
+  flex:none; width:62px; height:62px; border-radius:16px;
+  object-fit:cover; margin-top:8px;
+  border:1px solid rgba(63,182,255,.45);
+  box-shadow:0 8px 20px rgba(0,0,0,.5);
+  transform:rotate(3deg);
+}
+.momento:nth-child(even) .foto-momento{ transform:rotate(-3deg); }
 .momento::before{ /* trilho vertical */
   content:""; position:absolute; left:6px; top:8px; bottom:-2px;
-  width:2px; background:linear-gradient(180deg, rgba(29,185,84,.55), rgba(29,185,84,.08));
+  width:2px; background:linear-gradient(180deg, rgba(63,182,255,.55), rgba(63,182,255,.08));
 }
 .momento:last-child::before{ display:none; }
 .momento::after{ /* nó */
   content:""; position:absolute; left:0; top:5px;
   width:14px; height:14px; border-radius:50%;
-  background:var(--fundo); border:3px solid var(--verde);
-  box-shadow:0 0 14px rgba(29,185,84,.5);
+  background:var(--fundo); border:3px solid var(--ceu);
+  box-shadow:0 0 14px rgba(63,182,255,.5);
 }
 .momento .quando{
   font-size:11px; font-weight:800; letter-spacing:.2em;
-  color:var(--verde-claro); text-transform:uppercase;
+  color:var(--ceu-claro); text-transform:uppercase;
 }
 .momento .oque{ font-size:19px; font-weight:800; margin-top:4px; }
 .momento .conta{ color:var(--cinza); font-size:13.5px; line-height:1.5; margin-top:4px; }
@@ -367,7 +395,7 @@ body{
 /* ============ SLIDE 6 — TOP 5 ============ */
 .s-top{ gap:24px;
   background:
-    radial-gradient(70% 45% at 0% 100%, rgba(29,185,84,.15), transparent 70%),
+    radial-gradient(70% 45% at 0% 100%, rgba(63,182,255,.15), transparent 70%),
     var(--fundo);
 }
 .s-top .titulo{ font-size:clamp(32px,9vw,42px); }
@@ -383,47 +411,47 @@ body{
   font-size:26px; width:30px; flex:none; text-align:center;
   color:var(--cinza-escuro);
 }
-.lista-top li:first-child .pos{ color:var(--verde-neon); }
+.lista-top li:first-child .pos{ color:var(--ceu-neon); }
 .lista-top .info{ flex:1; min-width:0; }
 .lista-top .nome-item{ font-weight:700; font-size:15.5px; }
-.lista-top li:first-child .nome-item{ color:var(--verde-claro); }
+.lista-top li:first-child .nome-item{ color:var(--ceu-claro); }
 .lista-top .meta-item{ color:var(--cinza); font-size:12.5px; margin-top:2px; }
-.lista-top .coracao{ flex:none; color:var(--verde); opacity:.85; font-size:13px; }
+.lista-top .coracao{ flex:none; color:var(--ceu); opacity:.85; font-size:13px; }
 
 /* ============ SLIDE 7 — ESTILO DO AMOR ============ */
 .s-estilo{ gap:24px; text-align:left;
   background:
-    radial-gradient(80% 55% at 50% 115%, rgba(29,185,84,.2), transparent 72%),
+    radial-gradient(80% 55% at 50% 115%, rgba(63,182,255,.2), transparent 72%),
     var(--fundo);
 }
 .s-estilo .genero{ font-size:clamp(38px,10.6vw,48px); }
-.s-estilo .genero .serifa{ text-transform:none; color:var(--verde); letter-spacing:0; }
+.s-estilo .genero .serifa{ text-transform:none; color:var(--ceu); letter-spacing:0; }
 .etiquetas{ display:flex; flex-wrap:wrap; gap:9px; }
 .chip{
   font-size:12px; font-weight:700; letter-spacing:.06em;
   padding:9px 15px; border-radius:99px;
-  border:1px solid rgba(29,185,84,.4);
-  background:rgba(29,185,84,.08);
-  color:var(--verde-claro);
+  border:1px solid rgba(63,182,255,.4);
+  background:rgba(63,182,255,.08);
+  color:var(--ceu-claro);
 }
-.chip.cheio{ background:var(--verde); color:#04240f; border-color:var(--verde); }
+.chip.cheio{ background:var(--ceu); color:#03182E; border-color:var(--ceu); }
 .s-estilo .fantasma{ font-size:240px; top:-30px; right:-70px; transform:rotate(-10deg); }
 
 /* ============ SLIDE 8 — DIA DOS NAMORADOS ============ */
 .s-namorados{ gap:16px;
   background:
-    radial-gradient(70% 50% at 50% 0%, rgba(29,185,84,.18), transparent 70%),
-    radial-gradient(45% 30% at 0% 100%, rgba(29,185,84,.12), transparent 70%),
+    radial-gradient(70% 50% at 50% 0%, rgba(63,182,255,.18), transparent 70%),
+    radial-gradient(45% 30% at 0% 100%, rgba(63,182,255,.12), transparent 70%),
     var(--fundo);
 }
 .s-namorados .ordinal{
   font-family:var(--fonte-display);
   font-size:clamp(120px, 36vw, 158px);
-  line-height:.9; color:var(--verde);
-  text-shadow:0 0 90px rgba(29,185,84,.4);
+  line-height:.9; color:var(--ceu);
+  text-shadow:0 0 90px rgba(63,182,255,.4);
 }
 .s-namorados .ordinal sub{
-  font-size:.34em; vertical-align:baseline; color:var(--verde-claro);
+  font-size:.34em; vertical-align:baseline; color:var(--ceu-claro);
 }
 .s-namorados .titulo{ font-size:clamp(28px,8vw,38px); }
 .s-namorados .apoio b{ color:var(--branco); }
@@ -432,19 +460,19 @@ body{
 /* ============ SLIDE 9 — FINAL ============ */
 .s-final{ text-align:center; align-items:center; gap:0;
   background:
-    radial-gradient(85% 60% at 50% 120%, rgba(29,185,84,.3), transparent 70%),
-    radial-gradient(40% 28% at 12% 8%, rgba(29,185,84,.1), transparent 70%),
+    radial-gradient(85% 60% at 50% 120%, rgba(63,182,255,.3), transparent 70%),
+    radial-gradient(40% 28% at 12% 8%, rgba(63,182,255,.1), transparent 70%),
     var(--fundo);
 }
 .s-final .mensagem{
   font-size:clamp(26px,7.6vw,31px); line-height:1.4; max-width:24ch;
 }
-.s-final .mensagem b{ color:var(--verde-claro); font-style:italic; font-weight:400; }
+.s-final .mensagem b{ color:var(--ceu-claro); font-style:italic; font-weight:400; }
 .s-final .teamo{
   margin-top:30px;
   font-size:clamp(58px,17vw,76px);
-  color:var(--verde);
-  text-shadow:0 0 60px rgba(29,185,84,.45);
+  color:var(--ceu);
+  text-shadow:0 0 60px rgba(63,182,255,.45);
 }
 .s-final .assinatura{
   margin-top:34px; font-size:12px; font-weight:800;
@@ -459,7 +487,7 @@ body{
 .coracoes-flutuantes{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
 .coracoes-flutuantes span{
   position:absolute; bottom:-40px;
-  color:var(--verde); opacity:0;
+  color:var(--ceu); opacity:0;
   animation:flutuar var(--dur,9s) linear infinite;
   animation-delay:var(--atraso,0s);
   font-size:var(--tam,18px);
@@ -471,11 +499,21 @@ body{
   100%{ transform:translateY(-105vh) rotate(28deg);  opacity:0; }
 }
 
+/* ---------- telas baixas: linha do tempo com 4 momentos mais compacta ---------- */
+@media (max-height:760px){
+  .slide{ padding:64px 26px 40px; }
+  .s-momentos{ gap:14px; }
+  .momento{ padding-bottom:12px; }
+  .momento .conta{ font-size:12px; }
+  .foto-momento{ width:50px; height:50px; }
+}
+
 /* ---------- acessibilidade: movimento reduzido ---------- */
 @media (prefers-reduced-motion: reduce){
   .rev, .slide.ativo .rev{ animation:none; opacity:1; transform:none; filter:none; }
-  .botao-play, .capa-album::after, .capa-album svg,
-  .equalizador i, .coracoes-flutuantes span, .s-final .rever{ animation:none; }
+  .botao-play, .capa-album::after,
+  .equalizador i, .coracoes-flutuantes span, .s-final .rever,
+  .estrelas, .estrelas::after{ animation:none; }
   .coracoes-flutuantes{ display:none; }
 }
 </style>
@@ -536,7 +574,7 @@ body{
         <div class="bloco-tempo"><div class="num" id="c-seg">00</div><div class="rotulo">seg</div></div>
       </div>
       <p class="apoio rev" style="--d:.62s">E cada segundo valeu a pena.<br>
-        <span class="destaque-verde">Esse aqui também. E esse. E esse…</span></p>
+        <span class="destaque-ceu">Esse aqui também. E esse. E esse…</span></p>
     </section>
 
     <!-- ===== 4. NOSSA MÚSICA ===== -->
@@ -544,9 +582,7 @@ body{
       <div class="etiqueta rev" style="--d:.1s">Nossa música nº 1</div>
       <div class="player rev" style="--d:.28s">
         <div class="capa-album">
-          <svg viewBox="0 0 24 24" fill="#F4F6F2" aria-hidden="true">
-            <path d="M12 21s-7.5-4.7-10-9.3C.3 8.6 2.4 5 5.9 5c2 0 3.4 1 4.1 2.4h4C14.7 6 16.1 5 18.1 5c3.5 0 5.6 3.6 3.9 6.7C19.5 16.3 12 21 12 21z"/>
-          </svg>
+          <img src="fotos/lavanda-sq.jpg" alt="Ronaldo e Celina num campo de lavanda na Provença">
         </div>
         <div class="faixa">
           <div>
@@ -584,7 +620,7 @@ body{
       <div class="etiqueta rev" style="--d:.1s">O estilo do nosso amor</div>
       <h2 class="titulo genero rev" style="--d:.25s">Romance de<br><span class="serifa">longa duração</span></h2>
       <p class="apoio rev" style="--d:.45s">Com influências de road trip, café passado na manhã de domingo
-        e latidos felizes ao fundo. Crítica especializada: <b class="destaque-verde">“um clássico que só melhora com o tempo.”</b></p>
+        e latidos felizes ao fundo. Crítica especializada: <b class="destaque-ceu">“um clássico que só melhora com o tempo.”</b></p>
       <div class="etiquetas rev" style="--d:.65s" id="etiquetas"><!-- preenchido via CONFIG --></div>
     </section>
 
@@ -596,7 +632,7 @@ body{
       <h2 class="titulo rev" style="--d:.48s">Dia dos Namorados<br>de mãos dadas</h2>
       <p class="apoio rev" style="--d:.68s">Desde 2013, todo 12 de junho tem você do meu lado.
         <b>Feliz Dia dos Namorados, meu amor.</b>
-        <span class="destaque-verde">Que venham, no mínimo, outros mil.</span></p>
+        <span class="destaque-ceu">Que venham, no mínimo, outros mil.</span></p>
     </section>
 
     <!-- ===== 9. FINAL ===== -->
@@ -605,11 +641,14 @@ body{
       <p class="serifa mensagem rev" style="--d:.15s">De 2013 até aqui, entre países, domingos e quilômetros,
         a melhor parte de todos esses anos sempre foi simples: <b>você</b>.</p>
       <div class="titulo teamo rev" style="--d:.5s">Te amo</div>
-      <div class="assinatura rev" style="--d:.75s">feito com 💚 pelo Ronaldo</div>
+      <div class="assinatura rev" style="--d:.75s">feito com 💙 pelo Ronaldo</div>
       <div class="rever rev" style="--d:1s">toque para rever</div>
     </section>
 
   </div>
+
+  <!-- Céu estrelado por cima dos slides, abaixo dos controles -->
+  <div class="estrelas" aria-hidden="true"></div>
 
   <!-- Camada de toque: esquerda volta, direita avança, segurar pausa -->
   <div class="zonas oculto" id="zonas" aria-hidden="true"></div>
@@ -633,7 +672,7 @@ const CONFIG = {
     previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/50/8c/53/508c533a-955c-961e-4338-fa4a438799f9/mzaf_15648601222043785811.plus.aac.p.m4a"
   },
 
-  // Momentos marcantes, em ordem cronológica
+  // Momentos marcantes, em ordem cronológica ("foto" é opcional)
   momentos: [
     {
       quando: "Fevereiro de 2013",
@@ -648,7 +687,14 @@ const CONFIG = {
     {
       quando: "Agosto de 2018",
       titulo: "Noivos na Suíça",
-      texto: "Entre montanhas e chocolates, um “sim” que valeu por mil."
+      texto: "Entre montanhas e chocolates, um “sim” que valeu por mil.",
+      foto: "fotos/suica-thumb.jpg"
+    },
+    {
+      quando: "Fevereiro de 2023",
+      titulo: "Casados — no nosso 3 de fevereiro",
+      texto: "Exatos 10 anos depois do primeiro “sim”, o “sim” definitivo no cartório.",
+      foto: "fotos/cartorio-thumb.jpg"
     }
   ],
 
@@ -677,10 +723,13 @@ document.getElementById("musica-nome").textContent = CONFIG.musica.nome;
 document.getElementById("musica-artista").textContent = CONFIG.musica.artista;
 
 document.getElementById("linha-tempo").innerHTML = CONFIG.momentos.map((m, i) => `
-  <article class="momento rev" style="--d:${(0.42 + i * 0.18).toFixed(2)}s">
-    <div class="quando">${m.quando}</div>
-    <div class="oque">${m.titulo}</div>
-    <p class="conta">${m.texto}</p>
+  <article class="momento rev" style="--d:${(0.4 + i * 0.16).toFixed(2)}s">
+    <div class="info-momento">
+      <div class="quando">${m.quando}</div>
+      <div class="oque">${m.titulo}</div>
+      <p class="conta">${m.texto}</p>
+    </div>
+    ${m.foto ? `<img class="foto-momento" src="${m.foto}" alt="" loading="lazy">` : ""}
   </article>`).join("");
 
 document.getElementById("lista-top").innerHTML = CONFIG.top5.map((item, i) => `
