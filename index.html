@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#080908">
+<title>Nosso Wrapped — Ronaldo &amp; Celina 💚</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%231DB954' d='M12 21s-7.5-4.7-10-9.3C.3 8.6 2.4 5 5.9 5c2 0 3.4 1 4.1 2.4h4C14.7 6 16.1 5 18.1 5c3.5 0 5.6 3.6 3.9 6.7C19.5 16.3 12 21 12 21z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Figtree:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   NOSSO WRAPPED — retrospectiva romântica estilo Spotify Wrapped
+   Tema: fundo escuro + verde vibrante + tipografia de impacto
+   ============================================================ */
+:root{
+  --verde:        #1DB954;            /* verde Spotify */
+  --verde-claro:  #6BE89B;
+  --verde-neon:   #3DF07C;
+  --verde-fundo:  rgba(29,185,84,.14);
+  --fundo:        #080908;
+  --fundo-2:      #0E110E;
+  --branco:       #F4F6F2;
+  --cinza:        #9aa49c;
+  --cinza-escuro: #5b645d;
+  --fonte-corpo:  'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fonte-display:'Anton', 'Arial Narrow', Impact, sans-serif;
+  --fonte-serifa: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html, body{ height:100%; }
+
+body{
+  background:#050605;
+  color:var(--branco);
+  font-family:var(--fonte-corpo);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ---------- "Celular": palco da apresentação ---------- */
+.celular{
+  position:relative;
+  width:100%;
+  height:100dvh;
+  background:var(--fundo);
+  overflow:hidden;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+}
+
+/* Em telas grandes, vira uma moldura de celular centralizada */
+@media (min-width:560px) and (min-height:700px){
+  body{
+    background:
+      radial-gradient(60% 50% at 50% 42%, rgba(29,185,84,.13), transparent 70%),
+      #030403;
+  }
+  .celular{
+    width:404px;
+    height:min(94dvh, 856px);
+    border-radius:40px;
+    border:1px solid #1d231e;
+    box-shadow:
+      0 0 0 8px #0a0c0a,
+      0 40px 90px rgba(0,0,0,.75),
+      0 0 120px rgba(29,185,84,.10);
+  }
+}
+
+/* ---------- textura de grão por cima de tudo ---------- */
+.grao{
+  position:absolute; inset:0; z-index:40; pointer-events:none;
+  opacity:.06; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.8'/%3E%3C/svg%3E");
+}
+
+/* ---------- barra de progresso (estilo stories) ---------- */
+.progresso{
+  position:absolute; z-index:30;
+  top:calc(10px + env(safe-area-inset-top));
+  left:14px; right:14px;
+  display:flex; gap:5px;
+  transition:opacity .4s;
+}
+.progresso.oculto{ opacity:0; pointer-events:none; }
+.seg{
+  flex:1; height:3px; border-radius:99px;
+  background:rgba(255,255,255,.18); overflow:hidden;
+}
+.seg i{
+  display:block; height:100%; width:100%;
+  background:linear-gradient(90deg, var(--verde), var(--verde-neon));
+  transform:scaleX(0); transform-origin:left;
+}
+
+/* ---------- zonas de toque (esquerda volta / direita avança) ---------- */
+.zonas{
+  position:absolute; inset:0; z-index:25;
+  touch-action:manipulation; cursor:pointer;
+}
+.zonas.oculto{ display:none; }
+
+/* ---------- slides ---------- */
+.palco{ position:absolute; inset:0; }
+.slide{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:72px 30px 56px;
+  opacity:0; visibility:hidden;
+  transition:opacity .5s ease, visibility .5s ease;
+}
+.slide.ativo{ opacity:1; visibility:visible; }
+
+/* Revelação escalonada: cada elemento entra com atraso próprio (--d) */
+.rev{ opacity:0; }
+.slide.ativo .rev{
+  animation:subir .75s cubic-bezier(.2,.7,.2,1) forwards;
+  animation-delay:var(--d, 0s);
+}
+@keyframes subir{
+  from{ opacity:0; transform:translateY(26px); filter:blur(5px); }
+  to{   opacity:1; transform:translateY(0);    filter:blur(0); }
+}
+
+/* ---------- tipografia base ---------- */
+.etiqueta{
+  font-size:11px; font-weight:800; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--verde-claro);
+  display:flex; align-items:center; gap:10px;
+}
+.etiqueta::before{
+  content:""; width:22px; height:2px; background:var(--verde);
+  border-radius:2px; flex:none;
+}
+.titulo{
+  font-family:var(--fonte-display);
+  font-weight:400; text-transform:uppercase;
+  line-height:.95; letter-spacing:.01em;
+}
+.serifa{ font-family:var(--fonte-serifa); font-style:italic; font-weight:400; }
+.apoio{ color:var(--cinza); font-size:15px; line-height:1.55; }
+.destaque-verde{ color:var(--verde); }
+
+/* número/figura decorativa gigante ao fundo */
+.fantasma{
+  position:absolute; z-index:-1; pointer-events:none;
+  font-family:var(--fonte-display);
+  color:transparent;
+  -webkit-text-stroke:1.5px rgba(29,185,84,.16);
+  line-height:1;
+}
+
+/* ============ SLIDE 1 — CAPA ============ */
+.s-capa{ text-align:center; align-items:center; justify-content:center; gap:0;
+  background:
+    radial-gradient(75% 55% at 50% 110%, rgba(29,185,84,.22), transparent 70%),
+    radial-gradient(50% 35% at 85% -5%, rgba(29,185,84,.12), transparent 70%),
+    var(--fundo);
+}
+.s-capa .selo{
+  font-size:10px; font-weight:800; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--verde-claro);
+  border:1px solid rgba(29,185,84,.45);
+  border-radius:99px; padding:8px 16px;
+  margin-bottom:34px;
+}
+.s-capa .nomes{ font-size:clamp(48px, 14.5vw, 64px); }
+.s-capa .nomes em{
+  font-family:var(--fonte-serifa); font-style:italic; text-transform:none;
+  font-size:.62em; color:var(--verde); vertical-align:.12em; padding-right:.12em;
+}
+.s-capa .sub{ margin-top:18px; font-size:16px; color:var(--cinza); }
+.s-capa .sub strong{ color:var(--branco); font-weight:700; }
+.botao-play{
+  margin-top:44px;
+  width:84px; height:84px; border-radius:50%;
+  border:none; cursor:pointer;
+  background:var(--verde);
+  color:#04240f;
+  display:flex; align-items:center; justify-content:center;
+  animation:pulsar 2.2s ease-out infinite;
+  transition:transform .2s;
+}
+.botao-play:active{ transform:scale(.92); }
+.botao-play svg{ width:30px; height:30px; margin-left:5px; }
+@keyframes pulsar{
+  0%  { box-shadow:0 0 0 0 rgba(29,185,84,.45); }
+  70% { box-shadow:0 0 0 26px rgba(29,185,84,0); }
+  100%{ box-shadow:0 0 0 0 rgba(29,185,84,0); }
+}
+.s-capa .dica-play{
+  margin-top:18px; font-size:12px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--cinza-escuro); font-weight:700;
+}
+.s-capa .fantasma{ font-size:300px; top:-70px; right:-60px; transform:rotate(8deg); }
+
+/* ============ SLIDE 2 — ABERTURA ============ */
+.s-abertura{ gap:22px;
+  background:
+    radial-gradient(60% 40% at 0% 0%, rgba(29,185,84,.14), transparent 65%),
+    var(--fundo);
+}
+.s-abertura .linha-g{ font-size:clamp(34px,9.6vw,44px); }
+.s-abertura .data-serifa{
+  font-size:clamp(40px,11vw,52px); color:var(--verde); line-height:1.1;
+}
+.s-abertura .apoio{ font-size:16px; max-width:30ch; }
+.s-abertura .apoio b{ color:var(--branco); }
+.s-abertura .fantasma{ font-size:280px; bottom:-60px; left:-40px; }
+
+/* ============ SLIDE 3 — TEMPO JUNTOS ============ */
+.s-tempo{ gap:26px;
+  background:
+    radial-gradient(70% 45% at 100% 100%, rgba(29,185,84,.16), transparent 70%),
+    var(--fundo);
+}
+.s-tempo .titulo{ font-size:clamp(36px,10vw,46px); }
+.contador{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.bloco-tempo{
+  background:linear-gradient(160deg, rgba(29,185,84,.13), rgba(29,185,84,.04));
+  border:1px solid rgba(29,185,84,.22);
+  border-radius:18px;
+  padding:16px 6px 13px;
+  text-align:center;
+}
+.bloco-tempo .num{
+  font-family:var(--fonte-display);
+  font-size:clamp(30px,8.4vw,38px);
+  color:var(--verde-neon); line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.bloco-tempo .rotulo{
+  margin-top:7px; font-size:10px; font-weight:800;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--cinza);
+}
+.s-tempo .fantasma{ font-size:330px; top:-40px; right:-90px; font-family:var(--fonte-serifa); -webkit-text-stroke:1.5px rgba(29,185,84,.2); }
+
+/* ============ SLIDE 4 — NOSSA MÚSICA ============ */
+.s-musica{ gap:24px;
+  background:
+    radial-gradient(80% 50% at 50% -10%, rgba(29,185,84,.17), transparent 70%),
+    var(--fundo);
+}
+.player{
+  background:#101510;
+  border:1px solid #1d2a1f;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.capa-album{
+  position:relative;
+  width:100%; aspect-ratio:1/1;
+  border-radius:14px; overflow:hidden;
+  background:conic-gradient(from 210deg at 60% 40%, #062b14, var(--verde), #0a3d1f, var(--verde-neon), #062b14);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:20px;
+}
+.capa-album::after{ /* brilho de vinil girando devagar */
+  content:""; position:absolute; inset:-40%;
+  background:conic-gradient(from 0deg, transparent 0 70%, rgba(255,255,255,.16) 78%, transparent 86%);
+  animation:girar 9s linear infinite;
+}
+@keyframes girar{ to{ transform:rotate(360deg); } }
+.capa-album svg{ width:38%; filter:drop-shadow(0 10px 24px rgba(0,0,0,.45)); animation:bater 1.6s ease-in-out infinite; }
+@keyframes bater{
+  0%,100%{ transform:scale(1); }
+  12%    { transform:scale(1.1); }
+  24%    { transform:scale(1); }
+  36%    { transform:scale(1.07); }
+  48%    { transform:scale(1); }
+}
+.faixa{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.faixa .nome{ font-weight:800; font-size:18px; }
+.faixa .artista{ color:var(--cinza); font-size:13.5px; margin-top:3px; }
+.equalizador{ display:flex; align-items:flex-end; gap:3px; height:22px; flex:none; }
+.equalizador i{
+  width:4px; border-radius:2px; background:var(--verde);
+  animation:eq 1s ease-in-out infinite;
+}
+.equalizador i:nth-child(1){ height:60%; animation-delay:0s; }
+.equalizador i:nth-child(2){ height:100%; animation-delay:.25s; }
+.equalizador i:nth-child(3){ height:40%; animation-delay:.45s; }
+.equalizador i:nth-child(4){ height:80%; animation-delay:.1s; }
+@keyframes eq{ 0%,100%{ transform:scaleY(.4);} 50%{ transform:scaleY(1);} }
+.linha-progresso{ margin-top:18px; }
+.linha-progresso .trilho{
+  height:4px; border-radius:99px; background:#243227; position:relative;
+}
+.linha-progresso .feito{
+  position:absolute; inset:0 31% 0 0;
+  background:var(--verde); border-radius:99px;
+}
+.linha-progresso .feito::after{
+  content:""; position:absolute; right:-5px; top:50%;
+  width:11px; height:11px; border-radius:50%;
+  background:var(--branco); transform:translateY(-50%);
+}
+.tempos{
+  display:flex; justify-content:space-between;
+  margin-top:8px; font-size:11px; color:var(--cinza);
+  font-variant-numeric:tabular-nums;
+}
+.s-musica .citacao{
+  font-size:clamp(21px,6vw,25px); line-height:1.35; color:var(--branco);
+}
+.s-musica .citacao span{ color:var(--verde-claro); }
+
+/* ============ SLIDE 5 — MOMENTOS ============ */
+.s-momentos{ gap:26px;
+  background:
+    radial-gradient(55% 40% at 100% 0%, rgba(29,185,84,.14), transparent 70%),
+    var(--fundo);
+}
+.s-momentos .titulo{ font-size:clamp(32px,9vw,42px); }
+.linha-tempo{ display:flex; flex-direction:column; gap:4px; }
+.momento{
+  position:relative; padding:0 0 22px 30px;
+}
+.momento::before{ /* trilho vertical */
+  content:""; position:absolute; left:6px; top:8px; bottom:-2px;
+  width:2px; background:linear-gradient(180deg, rgba(29,185,84,.55), rgba(29,185,84,.08));
+}
+.momento:last-child::before{ display:none; }
+.momento::after{ /* nó */
+  content:""; position:absolute; left:0; top:5px;
+  width:14px; height:14px; border-radius:50%;
+  background:var(--fundo); border:3px solid var(--verde);
+  box-shadow:0 0 14px rgba(29,185,84,.5);
+}
+.momento .quando{
+  font-size:11px; font-weight:800; letter-spacing:.2em;
+  color:var(--verde-claro); text-transform:uppercase;
+}
+.momento .oque{ font-size:19px; font-weight:800; margin-top:4px; }
+.momento .conta{ color:var(--cinza); font-size:13.5px; line-height:1.5; margin-top:4px; }
+
+/* ============ SLIDE 6 — TOP 5 ============ */
+.s-top{ gap:24px;
+  background:
+    radial-gradient(70% 45% at 0% 100%, rgba(29,185,84,.15), transparent 70%),
+    var(--fundo);
+}
+.s-top .titulo{ font-size:clamp(32px,9vw,42px); }
+.lista-top{ list-style:none; display:flex; flex-direction:column; }
+.lista-top li{
+  display:flex; align-items:center; gap:16px;
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.lista-top li:last-child{ border-bottom:none; }
+.lista-top .pos{
+  font-family:var(--fonte-display);
+  font-size:26px; width:30px; flex:none; text-align:center;
+  color:var(--cinza-escuro);
+}
+.lista-top li:first-child .pos{ color:var(--verde-neon); }
+.lista-top .info{ flex:1; min-width:0; }
+.lista-top .nome-item{ font-weight:700; font-size:15.5px; }
+.lista-top li:first-child .nome-item{ color:var(--verde-claro); }
+.lista-top .meta-item{ color:var(--cinza); font-size:12.5px; margin-top:2px; }
+.lista-top .coracao{ flex:none; color:var(--verde); opacity:.85; font-size:13px; }
+
+/* ============ SLIDE 7 — ESTILO DO AMOR ============ */
+.s-estilo{ gap:24px; text-align:left;
+  background:
+    radial-gradient(80% 55% at 50% 115%, rgba(29,185,84,.2), transparent 72%),
+    var(--fundo);
+}
+.s-estilo .genero{ font-size:clamp(38px,10.6vw,48px); }
+.s-estilo .genero .serifa{ text-transform:none; color:var(--verde); letter-spacing:0; }
+.etiquetas{ display:flex; flex-wrap:wrap; gap:9px; }
+.chip{
+  font-size:12px; font-weight:700; letter-spacing:.06em;
+  padding:9px 15px; border-radius:99px;
+  border:1px solid rgba(29,185,84,.4);
+  background:rgba(29,185,84,.08);
+  color:var(--verde-claro);
+}
+.chip.cheio{ background:var(--verde); color:#04240f; border-color:var(--verde); }
+.s-estilo .fantasma{ font-size:240px; top:-30px; right:-70px; transform:rotate(-10deg); }
+
+/* ============ SLIDE 8 — DIA DOS NAMORADOS ============ */
+.s-namorados{ gap:16px;
+  background:
+    radial-gradient(70% 50% at 50% 0%, rgba(29,185,84,.18), transparent 70%),
+    radial-gradient(45% 30% at 0% 100%, rgba(29,185,84,.12), transparent 70%),
+    var(--fundo);
+}
+.s-namorados .ordinal{
+  font-family:var(--fonte-display);
+  font-size:clamp(120px, 36vw, 158px);
+  line-height:.9; color:var(--verde);
+  text-shadow:0 0 90px rgba(29,185,84,.4);
+}
+.s-namorados .ordinal sub{
+  font-size:.34em; vertical-align:baseline; color:var(--verde-claro);
+}
+.s-namorados .titulo{ font-size:clamp(28px,8vw,38px); }
+.s-namorados .apoio b{ color:var(--branco); }
+.s-namorados .fantasma{ font-size:260px; bottom:-50px; right:-70px; transform:rotate(12deg); }
+
+/* ============ SLIDE 9 — FINAL ============ */
+.s-final{ text-align:center; align-items:center; gap:0;
+  background:
+    radial-gradient(85% 60% at 50% 120%, rgba(29,185,84,.3), transparent 70%),
+    radial-gradient(40% 28% at 12% 8%, rgba(29,185,84,.1), transparent 70%),
+    var(--fundo);
+}
+.s-final .mensagem{
+  font-size:clamp(26px,7.6vw,31px); line-height:1.4; max-width:24ch;
+}
+.s-final .mensagem b{ color:var(--verde-claro); font-style:italic; font-weight:400; }
+.s-final .teamo{
+  margin-top:30px;
+  font-size:clamp(58px,17vw,76px);
+  color:var(--verde);
+  text-shadow:0 0 60px rgba(29,185,84,.45);
+}
+.s-final .assinatura{
+  margin-top:34px; font-size:12px; font-weight:800;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--cinza);
+}
+.s-final .rever{
+  margin-top:14px; font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--cinza-escuro); font-weight:700;
+  animation:piscar 2.4s ease-in-out infinite;
+}
+@keyframes piscar{ 0%,100%{opacity:.45;} 50%{opacity:1;} }
+.coracoes-flutuantes{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+.coracoes-flutuantes span{
+  position:absolute; bottom:-40px;
+  color:var(--verde); opacity:0;
+  animation:flutuar var(--dur,9s) linear infinite;
+  animation-delay:var(--atraso,0s);
+  font-size:var(--tam,18px);
+}
+@keyframes flutuar{
+  0%  { transform:translateY(0) rotate(0deg);        opacity:0; }
+  12% { opacity:.5; }
+  85% { opacity:.25; }
+  100%{ transform:translateY(-105vh) rotate(28deg);  opacity:0; }
+}
+
+/* ---------- acessibilidade: movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce){
+  .rev, .slide.ativo .rev{ animation:none; opacity:1; transform:none; filter:none; }
+  .botao-play, .capa-album::after, .capa-album svg,
+  .equalizador i, .coracoes-flutuantes span, .s-final .rever{ animation:none; }
+  .coracoes-flutuantes{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<main class="celular" id="celular">
+
+  <!-- Barra de progresso estilo stories (segmentos criados via JS) -->
+  <header class="progresso oculto" id="progresso" aria-hidden="true"></header>
+
+  <div class="palco">
+
+    <!-- ===== 1. CAPA ===== -->
+    <section class="slide s-capa ativo" data-slide="0">
+      <div class="fantasma" aria-hidden="true">♥</div>
+      <div class="selo rev" style="--d:.1s">Dia dos Namorados • Edição <span id="ano-edicao">2026</span></div>
+      <h1 class="titulo nomes rev" style="--d:.25s">Ronaldo<br><em>&amp;</em>Celina</h1>
+      <p class="sub rev" style="--d:.45s">Sua retrospectiva chegou, <strong>Celina</strong>.<br>E ela é sobre nós.</p>
+      <button class="botao-play rev" id="botao-play" style="--d:.65s" aria-label="Começar a retrospectiva">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <div class="dica-play rev" style="--d:.85s">toque no play</div>
+    </section>
+
+    <!-- ===== 2. ABERTURA ===== -->
+    <section class="slide s-abertura" data-slide="1">
+      <div class="fantasma" aria-hidden="true">2013</div>
+      <div class="etiqueta rev" style="--d:.1s">Onde tudo começou</div>
+      <h2 class="titulo linha-g rev" style="--d:.25s">Era uma vez,</h2>
+      <p class="serifa data-serifa rev" style="--d:.45s">3 de fevereiro<br>de 2013.</p>
+      <p class="apoio rev" style="--d:.7s">Naquele dia começava a nossa história.
+        <b><span id="dias-totais">…</span> dias depois</b>, ela continua sendo a minha favorita.</p>
+    </section>
+
+    <!-- ===== 3. TEMPO JUNTOS ===== -->
+    <section class="slide s-tempo" data-slide="2">
+      <div class="fantasma" aria-hidden="true">∞</div>
+      <div class="etiqueta rev" style="--d:.1s">Tempo juntos</div>
+      <h2 class="titulo rev" style="--d:.22s">Nós dois,<br>em tempo real</h2>
+      <div class="contador rev" style="--d:.42s" role="timer" aria-label="Tempo de relacionamento">
+        <div class="bloco-tempo"><div class="num" id="c-anos">0</div><div class="rotulo">anos</div></div>
+        <div class="bloco-tempo"><div class="num" id="c-meses">0</div><div class="rotulo">meses</div></div>
+        <div class="bloco-tempo"><div class="num" id="c-dias">0</div><div class="rotulo">dias</div></div>
+        <div class="bloco-tempo"><div class="num" id="c-horas">00</div><div class="rotulo">horas</div></div>
+        <div class="bloco-tempo"><div class="num" id="c-min">00</div><div class="rotulo">min</div></div>
+        <div class="bloco-tempo"><div class="num" id="c-seg">00</div><div class="rotulo">seg</div></div>
+      </div>
+      <p class="apoio rev" style="--d:.62s">E cada segundo valeu a pena.<br>
+        <span class="destaque-verde">Esse aqui também. E esse. E esse…</span></p>
+    </section>
+
+    <!-- ===== 4. NOSSA MÚSICA ===== -->
+    <section class="slide s-musica" data-slide="3">
+      <div class="etiqueta rev" style="--d:.1s">Nossa música nº 1</div>
+      <div class="player rev" style="--d:.28s">
+        <div class="capa-album">
+          <svg viewBox="0 0 24 24" fill="#F4F6F2" aria-hidden="true">
+            <path d="M12 21s-7.5-4.7-10-9.3C.3 8.6 2.4 5 5.9 5c2 0 3.4 1 4.1 2.4h4C14.7 6 16.1 5 18.1 5c3.5 0 5.6 3.6 3.9 6.7C19.5 16.3 12 21 12 21z"/>
+          </svg>
+        </div>
+        <div class="faixa">
+          <div>
+            <div class="nome" id="musica-nome">A Thousand Years</div>
+            <div class="artista" id="musica-artista">Christina Perri</div>
+          </div>
+          <div class="equalizador" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="linha-progresso" aria-hidden="true">
+          <div class="trilho"><div class="feito"></div></div>
+          <div class="tempos"><span>3:12</span><span>∞</span></div>
+        </div>
+      </div>
+      <p class="serifa citacao rev" style="--d:.55s">“I have loved you for a thousand years,<br>
+        <span>I’ll love you for a thousand more.”</span></p>
+    </section>
+
+    <!-- ===== 5. MOMENTOS MARCANTES ===== -->
+    <section class="slide s-momentos" data-slide="4">
+      <div class="etiqueta rev" style="--d:.1s">Momentos marcantes</div>
+      <h2 class="titulo rev" style="--d:.22s">Os capítulos<br>que definiram a gente</h2>
+      <div class="linha-tempo" id="linha-tempo"><!-- preenchido via CONFIG --></div>
+    </section>
+
+    <!-- ===== 6. TOP 5 ===== -->
+    <section class="slide s-top" data-slide="5">
+      <div class="etiqueta rev" style="--d:.1s">As mais tocadas</div>
+      <h2 class="titulo rev" style="--d:.22s">Nosso Top 5<br>em repeat</h2>
+      <ol class="lista-top rev" style="--d:.42s" id="lista-top"><!-- preenchido via CONFIG --></ol>
+    </section>
+
+    <!-- ===== 7. ESTILO DO NOSSO AMOR ===== -->
+    <section class="slide s-estilo" data-slide="6">
+      <div class="fantasma" aria-hidden="true">♥</div>
+      <div class="etiqueta rev" style="--d:.1s">O estilo do nosso amor</div>
+      <h2 class="titulo genero rev" style="--d:.25s">Romance de<br><span class="serifa">longa duração</span></h2>
+      <p class="apoio rev" style="--d:.45s">Com influências de road trip, café passado na manhã de domingo
+        e latidos felizes ao fundo. Crítica especializada: <b class="destaque-verde">“um clássico que só melhora com o tempo.”</b></p>
+      <div class="etiquetas rev" style="--d:.65s" id="etiquetas"><!-- preenchido via CONFIG --></div>
+    </section>
+
+    <!-- ===== 8. DIA DOS NAMORADOS ===== -->
+    <section class="slide s-namorados" data-slide="7">
+      <div class="fantasma" aria-hidden="true">♥</div>
+      <div class="etiqueta rev" style="--d:.1s">12 de junho</div>
+      <div class="ordinal rev" style="--d:.28s"><span id="n-edicao">14</span><sub>º</sub></div>
+      <h2 class="titulo rev" style="--d:.48s">Dia dos Namorados<br>de mãos dadas</h2>
+      <p class="apoio rev" style="--d:.68s">Desde 2013, todo 12 de junho tem você do meu lado.
+        <b>Feliz Dia dos Namorados, meu amor.</b>
+        <span class="destaque-verde">Que venham, no mínimo, outros mil.</span></p>
+    </section>
+
+    <!-- ===== 9. FINAL ===== -->
+    <section class="slide s-final" data-slide="8">
+      <div class="coracoes-flutuantes" aria-hidden="true" id="coracoes"></div>
+      <p class="serifa mensagem rev" style="--d:.15s">De 2013 até aqui, entre países, domingos e quilômetros,
+        a melhor parte de todos esses anos sempre foi simples: <b>você</b>.</p>
+      <div class="titulo teamo rev" style="--d:.5s">Te amo</div>
+      <div class="assinatura rev" style="--d:.75s">feito com 💚 pelo Ronaldo</div>
+      <div class="rever rev" style="--d:1s">toque para rever</div>
+    </section>
+
+  </div>
+
+  <!-- Camada de toque: esquerda volta, direita avança, segurar pausa -->
+  <div class="zonas oculto" id="zonas" aria-hidden="true"></div>
+
+  <div class="grao" aria-hidden="true"></div>
+</main>
+
+<script>
+/* ============================================================
+   CONFIG — edite aqui os dados do casal sem mexer no resto
+   ============================================================ */
+const CONFIG = {
+  // Data de início do relacionamento: ano, mês (1-12), dia
+  inicio: { ano: 2013, mes: 2, dia: 3 },
+
+  musica: { nome: "A Thousand Years", artista: "Christina Perri" },
+
+  // Momentos marcantes, em ordem cronológica
+  momentos: [
+    {
+      quando: "Fevereiro de 2013",
+      titulo: "O começo de tudo",
+      texto: "Começamos a namorar. O mundo nunca mais foi o mesmo — o nosso, pelo menos."
+    },
+    {
+      quando: "Setembro de 2015",
+      titulo: "Chile pela primeira vez",
+      texto: "Nosso primeiro carimbo no passaporte juntos. Frio lá fora, aquecimento global aqui dentro."
+    },
+    {
+      quando: "Agosto de 2018",
+      titulo: "Noivos na Suíça",
+      texto: "Entre montanhas e chocolates, um “sim” que valeu por mil."
+    }
+  ],
+
+  // Top 5 do casal, na ordem do ranking
+  top5: [
+    { nome: "Nossas viagens em casal",        meta: "Em turnê mundial desde 2013" },
+    { nome: "Cafés da manhã de domingo",      meta: "Quase 700 edições ao vivo, nenhuma repetida" },
+    { nome: "Vibe de Dois no YouTube",        meta: "A dupla que a gente assiste sendo dupla" },
+    { nome: "Passeios com as cachorras",      meta: "Aprovado pelas fãs mais peludas" },
+    { nome: "Kebab em Carpentras",            meta: "O clássico internacional do nosso cardápio" }
+  ],
+
+  // Etiquetas do slide "estilo do nosso amor"
+  etiquetas: ["VIAJANTES", "CAFÉ DE DOMINGO", "PET LOVERS", "COLECIONADORES DE PAÍSES", "KEBAB EM CARPENTRAS"],
+
+  // Duração de cada slide no avanço automático (ms)
+  duracaoSlide: 8000
+};
+
+/* ============================================================
+   Renderização do conteúdo dinâmico a partir do CONFIG
+   ============================================================ */
+const dataInicio = new Date(CONFIG.inicio.ano, CONFIG.inicio.mes - 1, CONFIG.inicio.dia);
+
+document.getElementById("musica-nome").textContent = CONFIG.musica.nome;
+document.getElementById("musica-artista").textContent = CONFIG.musica.artista;
+
+document.getElementById("linha-tempo").innerHTML = CONFIG.momentos.map((m, i) => `
+  <article class="momento rev" style="--d:${(0.42 + i * 0.18).toFixed(2)}s">
+    <div class="quando">${m.quando}</div>
+    <div class="oque">${m.titulo}</div>
+    <p class="conta">${m.texto}</p>
+  </article>`).join("");
+
+document.getElementById("lista-top").innerHTML = CONFIG.top5.map((item, i) => `
+  <li>
+    <span class="pos">${i + 1}</span>
+    <span class="info">
+      <span class="nome-item">${item.nome}</span><br>
+      <span class="meta-item">${item.meta}</span>
+    </span>
+    <span class="coracao" aria-hidden="true">♥</span>
+  </li>`).join("");
+
+document.getElementById("etiquetas").innerHTML = CONFIG.etiquetas.map((t, i) =>
+  `<span class="chip${i === 0 ? " cheio" : ""}">${t}</span>`).join("");
+
+// Corações flutuantes do slide final (posições fixas para resultado estável)
+document.getElementById("coracoes").innerHTML =
+  [["8%","9s","0s","16px"], ["22%","12s","2.5s","12px"], ["38%","10s","5s","20px"],
+   ["55%","13s","1.2s","13px"], ["70%","9.5s","3.8s","17px"], ["86%","11s",".6s","14px"]]
+  .map(([esq, dur, atraso, tam]) =>
+    `<span style="left:${esq};--dur:${dur};--atraso:${atraso};--tam:${tam}">♥</span>`).join("");
+
+// Total de dias juntos (slide de abertura)
+const diasTotais = Math.floor((Date.now() - dataInicio.getTime()) / 86400000);
+document.getElementById("dias-totais").textContent = diasTotais.toLocaleString("pt-BR");
+
+// Edição do Dia dos Namorados deste ano (12 de junho).
+// Vale para casais que começaram antes de 12/06 do primeiro ano (caso deles: fevereiro).
+const anoAtual = new Date().getFullYear();
+document.getElementById("ano-edicao").textContent = anoAtual;
+document.getElementById("n-edicao").textContent = anoAtual - CONFIG.inicio.ano + 1;
+
+/* ============================================================
+   Contador de tempo ao vivo (cálculo de calendário correto)
+   ============================================================ */
+function calculaTempoJunto(agora) {
+  // Avança ano a ano e mês a mês a partir da data de início,
+  // sem aproximações de 365 dias / 30 dias.
+  let anos = agora.getFullYear() - dataInicio.getFullYear();
+  let ancora = new Date(dataInicio);
+  ancora.setFullYear(dataInicio.getFullYear() + anos);
+  if (ancora > agora) { anos--; ancora.setFullYear(dataInicio.getFullYear() + anos); }
+
+  let meses = 0;
+  let proxima = new Date(ancora);
+  proxima.setMonth(proxima.getMonth() + 1);
+  while (proxima <= agora) { meses++; ancora = proxima; proxima = new Date(ancora); proxima.setMonth(proxima.getMonth() + 1); }
+
+  let resto = agora - ancora; // milissegundos desde a âncora ano+mês
+  const dias  = Math.floor(resto / 86400000); resto -= dias * 86400000;
+  const horas = Math.floor(resto / 3600000);  resto -= horas * 3600000;
+  const min   = Math.floor(resto / 60000);    resto -= min * 60000;
+  const seg   = Math.floor(resto / 1000);
+
+  return { anos, meses, dias, horas, min, seg };
+}
+
+const pad2 = (n) => String(n).padStart(2, "0");
+function atualizaContador() {
+  const t = calculaTempoJunto(new Date());
+  document.getElementById("c-anos").textContent  = t.anos;
+  document.getElementById("c-meses").textContent = t.meses;
+  document.getElementById("c-dias").textContent  = t.dias;
+  document.getElementById("c-horas").textContent = pad2(t.horas);
+  document.getElementById("c-min").textContent   = pad2(t.min);
+  document.getElementById("c-seg").textContent   = pad2(t.seg);
+}
+atualizaContador();
+setInterval(atualizaContador, 1000);
+
+/* ============================================================
+   Motor de stories: progresso, avanço automático, toque e pausa
+   ============================================================ */
+const slides     = Array.from(document.querySelectorAll(".slide"));
+const ULTIMO     = slides.length - 1;
+const progresso  = document.getElementById("progresso");
+const zonas      = document.getElementById("zonas");
+
+// Um segmento de progresso por slide de conteúdo (capa fica de fora)
+const preenchimentos = [];
+for (let i = 1; i <= ULTIMO; i++) {
+  const seg = document.createElement("div");
+  seg.className = "seg";
+  const fill = document.createElement("i");
+  seg.appendChild(fill);
+  progresso.appendChild(seg);
+  preenchimentos.push(fill);
+}
+
+let atual = 0;          // slide atual
+let iniciado = false;   // apresentação já começou (play)?
+let pausado = false;    // pausa por toque longo
+let oculto = false;     // aba em segundo plano
+let decorrido = 0;      // ms decorridos no slide atual
+let tsAnterior = null;
+
+function desenhaProgresso() {
+  for (let i = 0; i < preenchimentos.length; i++) {
+    const indiceSlide = i + 1;
+    let escala = 0;
+    if (indiceSlide < atual) escala = 1;
+    else if (indiceSlide === atual) {
+      escala = (atual === ULTIMO) ? 1 : Math.min(1, decorrido / CONFIG.duracaoSlide);
+    }
+    preenchimentos[i].style.transform = `scaleX(${escala})`;
+  }
+}
+
+function irPara(n) {
+  atual = Math.max(1, Math.min(ULTIMO, n));
+  decorrido = 0;
+  slides.forEach((s, i) => s.classList.toggle("ativo", i === atual));
+  desenhaProgresso();
+}
+
+function quadro(ts) {
+  if (tsAnterior === null) tsAnterior = ts;
+  const dt = ts - tsAnterior;
+  tsAnterior = ts;
+  if (iniciado && !pausado && !oculto && atual > 0 && atual < ULTIMO) {
+    decorrido += dt;
+    if (decorrido >= CONFIG.duracaoSlide) irPara(atual + 1);
+    else desenhaProgresso();
+  }
+  requestAnimationFrame(quadro);
+}
+requestAnimationFrame(quadro);
+
+document.getElementById("botao-play").addEventListener("click", () => {
+  iniciado = true;
+  progresso.classList.remove("oculto");
+  zonas.classList.remove("oculto");
+  progresso.removeAttribute("aria-hidden");
+  irPara(1);
+});
+
+// Toque: esquerda volta, direita avança; segurar pausa o avanço
+let timerSegurar = null;
+let segurando = false;
+
+zonas.addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  segurando = false;
+  timerSegurar = setTimeout(() => { segurando = true; pausado = true; }, 250);
+});
+
+zonas.addEventListener("pointerup", (e) => {
+  e.preventDefault();
+  clearTimeout(timerSegurar);
+  if (segurando) { pausado = false; segurando = false; return; }
+  const x = e.clientX - zonas.getBoundingClientRect().left;
+  const ladoEsquerdo = x < zonas.clientWidth * 0.33;
+  if (ladoEsquerdo) irPara(atual - 1);
+  else if (atual === ULTIMO) irPara(1);   // no final, toque reinicia a apresentação
+  else irPara(atual + 1);
+});
+
+zonas.addEventListener("pointercancel", () => {
+  clearTimeout(timerSegurar);
+  pausado = false; segurando = false;
+});
+zonas.addEventListener("contextmenu", (e) => e.preventDefault());
+
+// Bônus para desktop: setas do teclado e barra de espaço
+document.addEventListener("keydown", (e) => {
+  if (!iniciado) {
+    if (e.key === "Enter" || e.key === " ") document.getElementById("botao-play").click();
+    return;
+  }
+  if (e.key === "ArrowRight" || e.key === " ") (atual === ULTIMO) ? irPara(1) : irPara(atual + 1);
+  if (e.key === "ArrowLeft") irPara(atual - 1);
+});
+
+// Pausa quando a aba/tela sai de foco, para não pular slides sozinha
+document.addEventListener("visibilitychange", () => {
+  oculto = document.hidden;
+  tsAnterior = null;
+});
+</script>
+</body>
+</html>
